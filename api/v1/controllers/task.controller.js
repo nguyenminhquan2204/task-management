@@ -64,3 +64,29 @@ module.exports.detail = async (req, res) => {
         res.json("Not find");
     }
 };
+
+// [PATCH] /api/v1/tasks/change-status/:id
+module.exports.changeStatus = async (req, res) => {
+    try{
+        const id = req.params.id;
+        // console.log(req.body);
+
+        const status = req.body.status;
+
+        await Task.updateOne({
+            _id: id
+        }, {
+            status: status
+        });
+
+        res.json({
+            code: 200,
+            message: "Cập nhật trạng thái thành công!"
+        });
+    } catch(error) {
+        res.json({
+            code:400,
+            message: "Không tồn tại"
+        });
+    }
+};
