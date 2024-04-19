@@ -1,36 +1,16 @@
 const express = require("express");
 const database = require("./config/database");
 require("dotenv").config();
+
+const routesApiVer1 = require("./api/v1/routes/index.route");
+
 const app = express();
 const port = process.env.PORT;
 
 database.connect();
 
-const Task = require("./models/task.model");
-
-app.get("/tasks", async (req, res) => {
-    const tasks = await Task.find({
-        deleted: false
-    });
-
-    res.json(tasks);
-});
-
-app.get("/tasks/detail/:id", async (req, res) => {
-    const id = req.params.id;
-
-    try {
-        const task = await Task.findOne({
-            _id: id,
-            deleted: false
-        });
-
-        res.json(task);
-    } catch (error) {
-        // res.redirect("/tasks");
-        res.json("Not find");
-    }
-});
+// Routes Version 1
+routesApiVer1(app);
 
 app.listen(port, () => {
     console.log(`App listening on port ${port}`);
