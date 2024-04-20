@@ -108,6 +108,19 @@ module.exports.changeMulti = async (req, res) => {
                     message: "Cap nhat trang thai thanh cong"
                 });
                 break;
+            
+            case "delete":
+                await Task.updateMany({
+                    _id: { $in: ids }
+                }, {
+                    deleted: true,
+                    deletedAt: new Date()
+                });
+                res.json({
+                    code: 200,
+                    message: "Xoa thanh cong"
+                });
+                break;
 
             default:
                 res.json({
@@ -143,7 +156,7 @@ module.exports.create = async (req, res) => {
     }
 };
 
-// [PATCH] /api/v1/tasks/edit/:ids
+// [PATCH] /api/v1/tasks/edit/:id
 module.exports.edit = async (req, res) => {
     try {
         const id = req.params.id;
@@ -161,5 +174,29 @@ module.exports.edit = async (req, res) => {
             code: 400,
             message: "Error"
         })
+    }
+};
+
+// [DELETE] /api/v1/tasks/delete/:id
+module.exports.delete = async (req, res) => {
+    try {
+        const id = req.params.id;
+
+        await Task.updateOne({
+            _id: id
+        }, {
+            deleted: true,
+            deletedAt: new Date()
+        });
+
+        res.json({
+            code: 200,
+            message: "Xoa thanh cong"
+        });
+    } catch (error) {
+        res.json({
+            code: 400,
+            message: "Error"
+        });
     }
 };
