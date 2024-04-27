@@ -8,7 +8,11 @@ const searchHelper = require("../../../helpers/search");
 module.exports.index = async (req, res) => {
     // console.log(req.query);
     const find = {
-        deleted: false
+        $or: [
+            { createdBy: req.user.id},
+            { listUser: req.user.id }
+        ],
+        deleted: false,
     };
 
     if(req.query.status) {
